@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TilausDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Asiakkaat">
+    <Key>
+      <PropertyRef Name="AsiakasID" />
+    </Key>
+    <Property Name="AsiakasID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nimi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Osoite" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Postinumero" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="Postitoimipaikat" Relationship="Self.FK_Asiakkaat_Postitoimipaikat" FromRole="Asiakkaat" ToRole="Postitoimipaikat" />
+    <NavigationProperty Name="Tilaukset" Relationship="Self.FK_Tilaukset_Asiakkaat" FromRole="Asiakkaat" ToRole="Tilaukset" />
+  </EntityType>
+  <EntityType Name="Henkilot">
+    <Key>
+      <PropertyRef Name="Henkilo_id" />
+    </Key>
+    <Property Name="Henkilo_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Etunimi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Sukunimi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Osoite" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Esimies" Type="Int32" />
+    <Property Name="Postinumero" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+    <Property Name="Sahkoposti" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Postitoimipaikat">
+    <Key>
+      <PropertyRef Name="Postinumero" />
+    </Key>
+    <Property Name="Postinumero" Type="String" MaxLength="5" FixedLength="true" Unicode="false" Nullable="false" />
+    <Property Name="Postitoimipaikka" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Asiakkaat" Relationship="Self.FK_Asiakkaat_Postitoimipaikat" FromRole="Postitoimipaikat" ToRole="Asiakkaat" />
+    <NavigationProperty Name="Tilaukset" Relationship="Self.FK_Tilaukset_Postitoimipaikat" FromRole="Postitoimipaikat" ToRole="Tilaukset" />
+  </EntityType>
+  <EntityType Name="Tilaukset">
+    <Key>
+      <PropertyRef Name="TilausID" />
+    </Key>
+    <Property Name="TilausID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AsiakasID" Type="Int32" />
+    <Property Name="Toimitusosoite" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Postinumero" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+    <Property Name="Tilauspvm" Type="DateTime" Precision="3" />
+    <Property Name="Toimituspvm" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Asiakkaat" Relationship="Self.FK_Tilaukset_Asiakkaat" FromRole="Tilaukset" ToRole="Asiakkaat" />
+    <NavigationProperty Name="Postitoimipaikat" Relationship="Self.FK_Tilaukset_Postitoimipaikat" FromRole="Tilaukset" ToRole="Postitoimipaikat" />
+    <NavigationProperty Name="Tilausrivit" Relationship="Self.FK_Tilausrivit_Tilaukset" FromRole="Tilaukset" ToRole="Tilausrivit" />
+  </EntityType>
+  <EntityType Name="Tilausrivit">
+    <Key>
+      <PropertyRef Name="TilausriviID" />
+    </Key>
+    <Property Name="TilausriviID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TilausID" Type="Int32" />
+    <Property Name="TuoteID" Type="Int32" />
+    <Property Name="Maara" Type="Int32" />
+    <Property Name="Ahinta" Type="Decimal" Precision="5" Scale="2" />
+    <NavigationProperty Name="Tilaukset" Relationship="Self.FK_Tilausrivit_Tilaukset" FromRole="Tilausrivit" ToRole="Tilaukset" />
+    <NavigationProperty Name="Tuotteet" Relationship="Self.FK_Tilausrivit_Tuotteet" FromRole="Tilausrivit" ToRole="Tuotteet" />
+  </EntityType>
+  <EntityType Name="Tuotteet">
+    <Key>
+      <PropertyRef Name="TuoteID" />
+    </Key>
+    <Property Name="TuoteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nimi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Ahinta" Type="Decimal" Precision="7" Scale="2" />
+    <Property Name="Kuva" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="Tilausrivit" Relationship="Self.FK_Tilausrivit_Tuotteet" FromRole="Tuotteet" ToRole="Tilausrivit" />
+  </EntityType>
+  <Association Name="FK_Asiakkaat_Postitoimipaikat">
+    <End Role="Postitoimipaikat" Type="Self.Postitoimipaikat" Multiplicity="0..1" />
+    <End Role="Asiakkaat" Type="Self.Asiakkaat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Postitoimipaikat">
+        <PropertyRef Name="Postinumero" />
+      </Principal>
+      <Dependent Role="Asiakkaat">
+        <PropertyRef Name="Postinumero" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tilaukset_Asiakkaat">
+    <End Role="Asiakkaat" Type="Self.Asiakkaat" Multiplicity="0..1" />
+    <End Role="Tilaukset" Type="Self.Tilaukset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Asiakkaat">
+        <PropertyRef Name="AsiakasID" />
+      </Principal>
+      <Dependent Role="Tilaukset">
+        <PropertyRef Name="AsiakasID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tilaukset_Postitoimipaikat">
+    <End Role="Postitoimipaikat" Type="Self.Postitoimipaikat" Multiplicity="0..1" />
+    <End Role="Tilaukset" Type="Self.Tilaukset" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Postitoimipaikat">
+        <PropertyRef Name="Postinumero" />
+      </Principal>
+      <Dependent Role="Tilaukset">
+        <PropertyRef Name="Postinumero" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tilausrivit_Tilaukset">
+    <End Role="Tilaukset" Type="Self.Tilaukset" Multiplicity="0..1" />
+    <End Role="Tilausrivit" Type="Self.Tilausrivit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tilaukset">
+        <PropertyRef Name="TilausID" />
+      </Principal>
+      <Dependent Role="Tilausrivit">
+        <PropertyRef Name="TilausID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tilausrivit_Tuotteet">
+    <End Role="Tuotteet" Type="Self.Tuotteet" Multiplicity="0..1" />
+    <End Role="Tilausrivit" Type="Self.Tilausrivit" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tuotteet">
+        <PropertyRef Name="TuoteID" />
+      </Principal>
+      <Dependent Role="Tilausrivit">
+        <PropertyRef Name="TuoteID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="TilausDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Asiakkaat" EntityType="Self.Asiakkaat" />
+    <EntitySet Name="Henkilot" EntityType="Self.Henkilot" />
+    <EntitySet Name="Postitoimipaikat" EntityType="Self.Postitoimipaikat" />
+    <EntitySet Name="Tilaukset" EntityType="Self.Tilaukset" />
+    <EntitySet Name="Tilausrivit" EntityType="Self.Tilausrivit" />
+    <EntitySet Name="Tuotteet" EntityType="Self.Tuotteet" />
+    <AssociationSet Name="FK_Asiakkaat_Postitoimipaikat" Association="Self.FK_Asiakkaat_Postitoimipaikat">
+      <End Role="Postitoimipaikat" EntitySet="Postitoimipaikat" />
+      <End Role="Asiakkaat" EntitySet="Asiakkaat" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tilaukset_Asiakkaat" Association="Self.FK_Tilaukset_Asiakkaat">
+      <End Role="Asiakkaat" EntitySet="Asiakkaat" />
+      <End Role="Tilaukset" EntitySet="Tilaukset" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tilaukset_Postitoimipaikat" Association="Self.FK_Tilaukset_Postitoimipaikat">
+      <End Role="Postitoimipaikat" EntitySet="Postitoimipaikat" />
+      <End Role="Tilaukset" EntitySet="Tilaukset" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tilausrivit_Tilaukset" Association="Self.FK_Tilausrivit_Tilaukset">
+      <End Role="Tilaukset" EntitySet="Tilaukset" />
+      <End Role="Tilausrivit" EntitySet="Tilausrivit" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tilausrivit_Tuotteet" Association="Self.FK_Tilausrivit_Tuotteet">
+      <End Role="Tuotteet" EntitySet="Tuotteet" />
+      <End Role="Tilausrivit" EntitySet="Tilausrivit" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

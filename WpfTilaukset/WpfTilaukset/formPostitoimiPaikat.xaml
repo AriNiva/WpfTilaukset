@@ -1,0 +1,30 @@
+﻿<Window x:Class="WpfTilaukset.formPostitoimiPaikat"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfTilaukset"
+        mc:Ignorable="d"
+        Title="formPostitoimiPaikat" Height="450" Width="800">
+    <Grid>
+
+        <DataGrid AutoGenerateColumns="False" x:Name="dgPostitoimiPaikat" HorizontalAlignment="Left" Height="414" Margin="10,0,0,0" VerticalAlignment="Center" Width="390" SelectionChanged="dgPostitoimiPaikat_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Path=Postinumero}" Header="Postinumero"/>
+                <DataGridTextColumn Binding="{Binding Path=Postitoimipaikka}" Header="Postitoimipaikka" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Label x:Name="lblPostinro" Content="Postinro" HorizontalAlignment="Left" Margin="416,12,0,0" VerticalAlignment="Top" Width="155"/>
+        <TextBox x:Name="txtPostiNumero" HorizontalAlignment="Left" Margin="416,43,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" Height="23"/>
+        <Label x:Name="lblPostitoimipaikka" Content="Postitoimipaikka" HorizontalAlignment="Left" Margin="416,71,0,0" VerticalAlignment="Top" Width="155"/>
+        <TextBox x:Name="txtPostitoimipaikka" HorizontalAlignment="Left" Margin="416,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" Height="22"/>
+        <Button x:Name="btnLisaa" Content="Lisää" HorizontalAlignment="Left" Margin="416,129,0,0" VerticalAlignment="Top" Width="78" Click="btnLisaa_Click"/>
+        <TextBox x:Name="txtPoistaPostitoimipaikka" HorizontalAlignment="Left" Margin="416,288,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <Button x:Name="btnDelete" Content="Poista" HorizontalAlignment="Left" Margin="416,311,0,0" VerticalAlignment="Top" Width="78" Click="btnDelete_Click"/>
+        <Button x:Name="btnTallenna" Content="Tallenna" HorizontalAlignment="Left" Margin="416,390,0,0" VerticalAlignment="Top" Width="78" Height="34" Click="btnTallenna_Click"/>
+        <Button x:Name="btnSulje" Content="Sulje" HorizontalAlignment="Left" Margin="499,390,0,0" VerticalAlignment="Top" Width="78" Height="34" Click="btnSulje_Click"/>
+        <TextBox x:Name="txtPoistaPostinumero" HorizontalAlignment="Left" Margin="416,230,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <Label x:Name="lblPoistaPostinumero" Content="Postinumero" HorizontalAlignment="Left" Margin="416,199,0,0" VerticalAlignment="Top" Width="155" Cursor=""/>
+        <Label x:Name="lblPoistaPostitoimipaikka" Content="Postitoimipaikka" HorizontalAlignment="Left" Margin="416,257,0,0" VerticalAlignment="Top" Width="155"/>
+    </Grid>
+</Window>
